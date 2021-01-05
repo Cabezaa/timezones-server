@@ -14,12 +14,12 @@ const {
 const config = {
   enviroment: NODE_ENV || "development",
   port: PORT || 3005,
-  dbUrl: DB_URL || 'localhost',
+  dbUrl: DB_URL || "localhost",
   dbPort: DB_PORT || 27017,
-  dbName: DB_NAME || 'timezones',
+  dbName: DB_NAME || "timezones",
   allowedOrigins: ALLOWED_ORIGINS || "http://localhost:3000",
   worldtimeAPI: WORLDTIMEAPI_URL,
-  mongoContainerName: MONGO_CONTAINER_NAME || 'mongo',
+  mongoContainerName: MONGO_CONTAINER_NAME || "mongo",
 };
 
 module.exports = config;

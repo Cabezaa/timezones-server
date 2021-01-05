@@ -3,6 +3,8 @@ const { Connection } = require("../../db/mongo.instance");
 const worldtimeAPI = require("../../utils/worldtimeApi.instance");
 require("../../utils/axiosRetry.config");
 
+const { GeneralError } = require("../../utils/generalError");
+
 /**
  * Get the timezone that matches with the name param and return it.
  * @param {string} [name] - Name of the timezone to get
@@ -26,9 +28,15 @@ const getTimezone = async (name) => {
 
     return { ...timezone, date: date, time: time };
   } catch (error) {
-    console.error("Error getting the timezones");
-    console.error(error);
-    throw new Error("Internal Server Error");
+    if (error.isAxiosError) {
+      //It's means that the error is in the API of WorldTime
+      throw new GeneralError(
+        "Error in the connection with the Worldtime API - Timeout",
+        504
+      );
+    } else {
+      throw new GeneralError("Internal Server Error", 500);
+    }
   }
 };
 

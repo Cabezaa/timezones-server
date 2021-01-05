@@ -3,31 +3,27 @@ const { getTimezone } = require("../services/timezones/getTimezone");
 const { putTimezone } = require("../services/timezones/putTimezone");
 const { deleteTimezone } = require("../services/timezones/deleteTimezone");
 
-const getTimezonesController = async (req, res) => {
+const getTimezonesController = async (req, res, next) => {
   try {
     const timezones = await getTimezones();
     res.status(200).json(timezones);
   } catch (error) {
-    console.error("Error geting the timezones");
-    console.error(error);
-    res.status(500).send(error.message);
+    next(error);
   }
 };
 
-const getTimezoneController = async (req, res) => {
+const getTimezoneController = async (req, res, next) => {
   const { name } = req.params;
 
   try {
     const timezone = await getTimezone(name);
     res.status(200).json(timezone);
   } catch (error) {
-    console.error("Error getting the timezone");
-    console.error(error);
-    res.status(500).send(error.message);
+    next(error);
   }
 };
 
-const putTimezonesController = async (req, res) => {
+const putTimezonesController = async (req, res, next) => {
   const { name } = req.params;
   try {
     const timezone = await putTimezone(name);
@@ -39,13 +35,11 @@ const putTimezonesController = async (req, res) => {
       res.status(204).send();
     }
   } catch (error) {
-    console.error("Error in the PUT of a timezone");
-    console.error(error);
-    res.status(500).send(error.message);
+    next(error);
   }
 };
 
-const deleteTimezonesController = async (req, res) => {
+const deleteTimezonesController = async (req, res, next) => {
   const { name } = req.params;
   try {
     const timezone = await deleteTimezone(name);
@@ -57,9 +51,7 @@ const deleteTimezonesController = async (req, res) => {
       res.status(204).send();
     }
   } catch (error) {
-    console.error("Error in the PUT of a timezone");
-    console.error(error);
-    res.status(500).send(error.message);
+    next(error);
   }
 };
 
