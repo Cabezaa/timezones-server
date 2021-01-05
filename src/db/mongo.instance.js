@@ -39,8 +39,9 @@ class Connection {
 Connection.db = null;
 Connection.url = `mongodb://${
   config.enviroment === "production" ? config.mongoContainerName : config.dbUrl
-}:${config.dbPort}`;
-Connection.dbName = config.dbName;
+}:${config.dbPort}`; //If we are in develop, we use localhost. In production, we target the mongo container
+Connection.dbName =
+  config.enviroment === "test" ? "timezones_test" : config.dbName; //change the database use to test
 Connection.options = {
   bufferMaxEntries: 0,
   useNewUrlParser: true,
