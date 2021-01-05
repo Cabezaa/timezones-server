@@ -1,4 +1,5 @@
 const { Connection } = require("../../db/mongo.instance");
+const { GeneralError } = require("../../utils/generalError");
 
 /**
  * Soft delete a Timezone - Changes the Show attribute to false
@@ -18,9 +19,7 @@ const deleteTimezone = async (name) => {
     const { value } = result; //If its updated, returns the new objects. If there no exist the target, returns null
     return value;
   } catch (error) {
-    console.error("Error when trying to soft delete a timezone");
-    console.error(error);
-    throw new Error("Internal Server Error");
+    throw new GeneralError("Internal Server Error", 500);
   }
 };
 
