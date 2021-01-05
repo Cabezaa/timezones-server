@@ -3,5 +3,5 @@ const config = require("../config");
 
 module.exports = axios.create({
   baseURL: config.worldtimeAPI,
-  timeout: 20000,
+  timeout: 30000,
 });

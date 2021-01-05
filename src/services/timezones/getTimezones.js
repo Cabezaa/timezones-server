@@ -1,5 +1,6 @@
 const worldtimeAPI = require("../../utils/worldtimeApi.instance");
 const { Connection } = require("../../db/mongo.instance");
+const { GeneralError } = require("../../utils/generalError");
 
 /**
  * Get the timezones from the database. If the collection is empty, call to the worldtime api to fill the collection.
@@ -25,14 +26,17 @@ const getTimezones = async () => {
       const result = await collectionTimezones.insertMany(timezones);
       if (result.ok === 0) {
         console.error("Error when insert the timezones to the DB");
-        throw new Error("Error inserting the Timezones");
+        throw new GeneralError("Error inserting the Timezones", 500);
       }
     }
     return timezones;
   } catch (error) {
-    console.error("Error getting the timezones");
-    console.error(error);
-    throw new Error("Internal Server Error");
+    if (error instanceof GeneralError) {
+      //case when the error is throw by the fetchTimezonesFromApi function
+      throw error;
+    } else {
+      throw new GeneralError("Internal Server Error", 500);
+    }
   }
 };
 
@@ -46,9 +50,7 @@ const fetchTimezonesFromAPI = async () => {
     let response = await worldtimeAPI.get(`/timezones`);
     return response.data;
   } catch (error) {
-    console.error("Error geting the timezones from the API");
-    console.error(error);
-    throw new Error("Error in the call to the WorldTime API");
+    throw new GeneralError("Error in the call to the WorldTime API", 504);
   }
 };
 

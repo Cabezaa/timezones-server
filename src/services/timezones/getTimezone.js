@@ -1,8 +1,4 @@
 const { Connection } = require("../../db/mongo.instance");
-
-const worldtimeAPI = require("../../utils/worldtimeApi.instance");
-require("../../utils/axiosRetry.config");
-
 const { GeneralError } = require("../../utils/generalError");
 
 /**
@@ -16,27 +12,22 @@ const getTimezone = async (name) => {
   try {
     const collectionTimezones = Connection.db.collection("timezones");
     const timezone = await collectionTimezones.findOne({ name: name });
-    const { data } = await worldtimeAPI.get(`/timezone/${name}`);
-    const datetime = new Date(data.datetime);
+    if (timezone) {
+      const datetime = new Date();
 
-    const date = datetime
-      ? datetime.toLocaleDateString("en-US", { timeZone: data.timezone })
-      : "";
-    const time = datetime
-      ? datetime.toLocaleTimeString("en-US", { timeZone: data.timezone })
-      : "";
+      const date = datetime
+        ? datetime.toLocaleDateString("en-US", { timeZone: timezone.name })
+        : "";
+      const time = datetime
+        ? datetime.toLocaleTimeString("en-US", { timeZone: timezone.name })
+        : "";
 
-    return { ...timezone, date: date, time: time };
-  } catch (error) {
-    if (error.isAxiosError) {
-      //It's means that the error is in the API of WorldTime
-      throw new GeneralError(
-        "Error in the connection with the Worldtime API - Timeout",
-        504
-      );
+      return { ...timezone, date: date, time: time };
     } else {
-      throw new GeneralError("Internal Server Error", 500);
+      return null;
     }
+  } catch (error) {
+    throw new GeneralError("Internal Server Error", 500);
   }
 };
 
