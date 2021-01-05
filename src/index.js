@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+var morgan = require("morgan");
 require("dotenv").config();
 
 const config = require("./config");
@@ -17,6 +18,7 @@ var corsOptions = {
 //middlewares
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(morgan("dev"));
 
 //Attach the Router to the App
 app.use(apiRoutes);
