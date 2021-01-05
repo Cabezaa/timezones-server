@@ -19,7 +19,6 @@ const getTimezoneController = async (req, res) => {
 
   try {
     const timezone = await getTimezone(name);
-    console.log(timezone);
     res.status(200).json(timezone);
   } catch (error) {
     console.error("Error getting the timezone");

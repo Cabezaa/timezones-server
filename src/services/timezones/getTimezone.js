@@ -16,11 +16,12 @@ const getTimezone = async (name) => {
     const timezone = await collectionTimezones.findOne({ name: name });
     const { data } = await worldtimeAPI.get(`/timezone/${name}`);
     const datetime = new Date(data.datetime);
+
     const date = datetime
-      ? datetime.toLocaleDateString("en-US", { timeZone: data.timeZone })
+      ? datetime.toLocaleDateString("en-US", { timeZone: data.timezone })
       : "";
     const time = datetime
-      ? datetime.toLocaleTimeString("en-US", { timeZone: data.timeZone })
+      ? datetime.toLocaleTimeString("en-US", { timeZone: data.timezone })
       : "";
 
     return { ...timezone, date: date, time: time };
