@@ -1,5 +1,5 @@
-const { Connection } = require("../../db/mongo.instance");
 const { GeneralError } = require("../../utils/generalError");
+const timezonesRepository = require("../../repositories/timezones");
 
 /**
  * Soft delete a Timezone - Changes the Show attribute to false
@@ -10,14 +10,12 @@ const { GeneralError } = require("../../utils/generalError");
  */
 const deleteTimezone = async (name) => {
   try {
-    const collectionTimezones = Connection.db.collection("timezones");
-    const result = await collectionTimezones.findOneAndUpdate(
+    //This is a 'soft delete'
+    const deletedTimezone = await timezonesRepository.findOneAndUpdate(
       { name: name },
-      { $set: { show: false } },
-      { returnOriginal: false } //we want the new object
+      { show: false }
     );
-    const { value } = result; //If its updated, returns the new object. If there is no timezone, returns null
-    return value;
+    return deletedTimezone;
   } catch (error) {
     throw new GeneralError("Internal Server Error", 500);
   }

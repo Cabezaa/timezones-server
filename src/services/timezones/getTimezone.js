@@ -1,5 +1,5 @@
-const { Connection } = require("../../db/mongo.instance");
 const { GeneralError } = require("../../utils/generalError");
+const timezonesRepository = require("../../repositories/timezones");
 
 /**
  * Get the timezone that matches with the name param and return it.
@@ -10,8 +10,7 @@ const { GeneralError } = require("../../utils/generalError");
  */
 const getTimezone = async (name) => {
   try {
-    const collectionTimezones = Connection.db.collection("timezones");
-    const timezone = await collectionTimezones.findOne({ name: name });
+    const timezone = await timezonesRepository.findOne({ name: name });
     if (timezone) {
       const datetime = new Date();
 

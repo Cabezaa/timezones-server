@@ -24,7 +24,7 @@ const getTimezoneController = async (req, res, next) => {
       res.status(200).json(timezone);
     } else {
       //It's mean that doesn't exist a timezone with that name
-      throw new GeneralError("Timezone does not exists", 204);
+      throw new GeneralError("Timezone does not exists", 404);
     }
   } catch (error) {
     console.error(error);
