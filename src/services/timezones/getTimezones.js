@@ -16,8 +16,8 @@ const getTimezones = async () => {
 
     if (timezones.length === 0) {
       //We need to fetch the timezones from the API and save it in the database.
-      timezones = await fetchTimezonesFromAPI();
-      timezones = timezones.map((timezone) => {
+      const timezonesNames = await fetchTimezonesFromAPI();
+      timezones = timezonesNames.map((timezone) => {
         return {
           name: timezone,
           show: false,

@@ -86,7 +86,7 @@ npm run test
 
 It will call `Mocha` with a 20000ms of timeout.
 
-**Important:** The test suite will create a new database in the same database system, but with another name (`timezones_test`).
+**Important:** The test suite will create a new database in the same connection, but with another name (`timezones_test`).
 
 ## Docker
 

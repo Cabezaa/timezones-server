@@ -16,7 +16,7 @@ const deleteTimezone = async (name) => {
       { $set: { show: false } },
       { returnOriginal: false } //we want the new object
     );
-    const { value } = result; //If its updated, returns the new objects. If there no exist the target, returns null
+    const { value } = result; //If its updated, returns the new object. If there is no timezone, returns null
     return value;
   } catch (error) {
     throw new GeneralError("Internal Server Error", 500);
