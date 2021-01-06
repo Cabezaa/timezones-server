@@ -1,0 +1,46 @@
+{
+  "name": "timezones-server",
+  "version": "1.0.0",
+  "description": "'A server for the timezones challenge'",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon  src/index.js",
+    "test": "mocha --timeout 20000",
+    "lint": "eslint --fix ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cabezaa/timezones-server.git"
+  },
+  "author": "Esteban Ruiz de Galarreta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cabezaa/timezones-server/issues"
+  },
+  "homepage": "https://github.com/Cabezaa/timezones-server#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "axios-retry": "^3.1.9",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "eslint": "^7.16.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-mocha": "^8.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6",
+    "prettier": "2.2.1"
+  },
+  "engines": {
+    "node": ">=14.15.3",
+    "npm": ">=6.14.9"
+  }
+}
