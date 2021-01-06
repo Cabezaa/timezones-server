@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const config = require("./config");
 const apiRoutes = require("./routes/index");
-const handleErrors = require("./middleware/handleErrors");
+const handleErrors = require("./middlewares/handleErrors");
 const { Connection } = require("./db/mongo.instance");
 
 const app = express();
