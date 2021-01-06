@@ -1,6 +1,8 @@
 const worldtimeAPI = require("../../utils/worldtimeApi.instance");
+require("../../utils/axiosRetry.config");
 const { GeneralError } = require("../../utils/generalError");
 const timezonesRepository = require("../../repositories/timezones");
+const { dateTimeToLocale } = require("../../utils/dateTimeToLocale");
 
 /**
  * Get the timezones from the database. If the collection is empty, call to the worldtime api to fill the collection.
@@ -10,9 +12,8 @@ const timezonesRepository = require("../../repositories/timezones");
  */
 const getTimezones = async () => {
   try {
-    let timezones = [];
-    //Find in the DB
-    timezones = await timezonesRepository.findAll();
+    //First we check locally if have the timezones
+    let timezones = await timezonesRepository.findAll();
     if (timezones.length === 0) {
       //We need to fetch the timezones from the API and save it in the database.
       const timezonesNames = await fetchTimezonesFromAPI();
@@ -25,7 +26,13 @@ const getTimezones = async () => {
       const insertedTimezones = await timezonesRepository.insertMany(timezones);
       timezones = insertedTimezones;
     }
-    return timezones;
+
+    //date and time are added for each timezone
+    const timezonesWithDateTime = timezones.map((timezone) => {
+      const localeDateTime = dateTimeToLocale(timezone.name);
+      return { ...timezone, ...localeDateTime };
+    });
+    return timezonesWithDateTime;
   } catch (error) {
     if (error instanceof GeneralError) {
       //case when the error is throw by the fetchTimezonesFromApi function or by the DB abstraction

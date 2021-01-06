@@ -1,6 +1,8 @@
 const { GeneralError } = require("../../utils/generalError");
 const timezonesRepository = require("../../repositories/timezones");
 
+const { dateTimeToLocale } = require("../../utils/dateTimeToLocale");
+
 /**
  * Get the timezone that matches with the name param and return it.
  * @param {string} [name] - Name of the timezone to get
@@ -12,16 +14,8 @@ const getTimezone = async (name) => {
   try {
     const timezone = await timezonesRepository.findOne({ name: name });
     if (timezone) {
-      const datetime = new Date();
-
-      const date = datetime
-        ? datetime.toLocaleDateString("en-US", { timeZone: timezone.name })
-        : "";
-      const time = datetime
-        ? datetime.toLocaleTimeString("en-US", { timeZone: timezone.name })
-        : "";
-
-      return { ...timezone, date: date, time: time };
+      const localeDateTime = await dateTimeToLocale(timezone.name);
+      return { ...timezone, ...localeDateTime };
     } else {
       return null;
     }
