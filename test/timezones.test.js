@@ -53,23 +53,23 @@ describe("Timezones", async () => {
         });
     });
 
-    it("it should return a 204 (timezone Neuquen does not exists)", (done) => {
+    it("it should return a 404 (timezone Neuquen does not exists)", (done) => {
       const parsedName = encodeURIComponent("America/Argentina/Neuquen");
       chai
         .request(server)
         .get("/timezones/" + parsedName)
         .end((err, res) => {
-          expect(res).to.have.status(204);
+          expect(res).to.have.status(404);
           done();
         });
     });
 
-    it("it should return a 204 (bad type param)", (done) => {
+    it("it should return a 404 (bad type param)", (done) => {
       chai
         .request(server)
         .get("/timezones/" + 10000)
         .end((err, res) => {
-          expect(res).to.have.status(204);
+          expect(res).to.have.status(404);
           done();
         });
     });

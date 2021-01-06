@@ -1,6 +1,6 @@
 const worldtimeAPI = require("../../utils/worldtimeApi.instance");
-const { Connection } = require("../../db/mongo.instance");
 const { GeneralError } = require("../../utils/generalError");
+const timezonesRepository = require("../../repositories/timezones");
 
 /**
  * Get the timezones from the database. If the collection is empty, call to the worldtime api to fill the collection.
@@ -11,28 +11,24 @@ const { GeneralError } = require("../../utils/generalError");
 const getTimezones = async () => {
   try {
     let timezones = [];
-    const collectionTimezones = Connection.db.collection("timezones");
-    timezones = await collectionTimezones.find().toArray();
-
+    //Find in the DB
+    timezones = await timezonesRepository.findAll();
     if (timezones.length === 0) {
       //We need to fetch the timezones from the API and save it in the database.
-      timezones = await fetchTimezonesFromAPI();
-      timezones = timezones.map((timezone) => {
+      const timezonesNames = await fetchTimezonesFromAPI();
+      timezones = timezonesNames.map((timezone) => {
         return {
           name: timezone,
           show: false,
         };
       });
-      const result = await collectionTimezones.insertMany(timezones);
-      if (result.ok === 0) {
-        console.error("Error when insert the timezones to the DB");
-        throw new GeneralError("Error inserting the Timezones", 500);
-      }
+      const insertedTimezones = await timezonesRepository.insertMany(timezones);
+      timezones = insertedTimezones;
     }
     return timezones;
   } catch (error) {
     if (error instanceof GeneralError) {
-      //case when the error is throw by the fetchTimezonesFromApi function
+      //case when the error is throw by the fetchTimezonesFromApi function or by the DB abstraction
       throw error;
     } else {
       throw new GeneralError("Internal Server Error", 500);
