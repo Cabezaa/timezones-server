@@ -65,6 +65,27 @@ const insertMany = async (timezones) => {
 };
 
 /**
+ * Insert a Timezone to the DB
+ * @param {object} [timezone] - A timezone object
+ * @returns {objct} - a timezone object
+ * @throws Will throw an error if exists any problem with the DB
+ *
+ */
+const insertOne = async (timezone) => {
+  try {
+    const collectionTimezones = getTimezonesCollection();
+    const insertResult = await collectionTimezones.insertOne(timezone);
+    //to return the inserted objects (_id,name,show)
+    const timezoneNewObject = insertResult.ops[0];
+    return timezoneNewObject;
+  } catch (error) {
+    console.error("Error when insert a timezone to the DB");
+    console.error(error);
+    throw new GeneralError("Internal Server Error", 500);
+  }
+};
+
+/**
  * Find a timezone and update it
  * @param {object} [filters] - The filters for the find
  * @param {object} [newObject] - The object that will replace the found items
@@ -92,4 +113,4 @@ const findOneAndUpdate = async (filters, newObject) => {
   }
 };
 
-module.exports = { findAll, findOne, insertMany, findOneAndUpdate };
+module.exports = { findAll, findOne, insertOne, insertMany, findOneAndUpdate };

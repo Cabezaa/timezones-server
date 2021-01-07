@@ -4,6 +4,8 @@ process.env.WORLDTIMEAPI_URL = "http://worldtimeapi.org/api";
 
 const { Connection } = require("../src/db/mongo.instance");
 
+const timezonesRepository = require("../src/repositories/timezones");
+
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../src/index");
@@ -16,7 +18,23 @@ describe("Timezones", async () => {
   before(async () => {
     await Connection.connectMongo();
     const collectionTimezones = Connection.db.collection("timezones");
-    const result = await collectionTimezones.deleteMany({});
+    await collectionTimezones.deleteMany({});
+
+    //To prevent the cases of failures in the "GET ALL" from world time api
+    const mockUpData = [
+      { name: "Africa/Algiers", show: false },
+      { name: "Africa/Tripoli", show: false },
+      { name: "America/Argentina/Buenos_Aires", show: false },
+      { name: "America/Argentina/Cordoba", show: false },
+    ];
+    await collectionTimezones.insertMany(mockUpData);
+  });
+
+  //To clean up the database after all the tests
+  after(async () => {
+    await Connection.connectMongo();
+    const collectionTimezones = Connection.db.collection("timezones");
+    await collectionTimezones.deleteMany({});
   });
 
   describe("/GET timezones", () => {
@@ -58,16 +76,6 @@ describe("Timezones", async () => {
       chai
         .request(server)
         .get("/timezones/" + parsedName)
-        .end((err, res) => {
-          expect(res).to.have.status(404);
-          done();
-        });
-    });
-
-    it("it should return a 404 (bad type param)", (done) => {
-      chai
-        .request(server)
-        .get("/timezones/" + 10000)
         .end((err, res) => {
           expect(res).to.have.status(404);
           done();

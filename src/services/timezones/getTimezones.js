@@ -2,7 +2,7 @@ const worldtimeAPI = require("../../utils/worldtimeApi.instance");
 require("../../utils/axiosRetry.config");
 const { GeneralError } = require("../../utils/generalError");
 const timezonesRepository = require("../../repositories/timezones");
-const { dateTimeToLocale } = require("../../utils/dateTimeToLocale");
+const { timezoneToDateAndTime } = require("../../utils/timezoneToDateAndTime");
 
 /**
  * Get the timezones from the database. If the collection is empty, call to the worldtime api to fill the collection.
@@ -29,7 +29,7 @@ const getTimezones = async () => {
 
     //date and time are added for each timezone
     const timezonesWithDateTime = timezones.map((timezone) => {
-      const localeDateTime = dateTimeToLocale(timezone.name);
+      const localeDateTime = timezoneToDateAndTime(timezone.name);
       return { ...timezone, ...localeDateTime };
     });
     return timezonesWithDateTime;
@@ -45,7 +45,7 @@ const getTimezones = async () => {
 
 /**
  * Function to get the timezones list from the Worldtime API.
- * @returns {Array} - A array of timezones
+ * @returns {Array} - A array of timezones names
  * @throws Will throw an error if exists any problem in the conecttion with the Worldtime API
  */
 const fetchTimezonesFromAPI = async () => {

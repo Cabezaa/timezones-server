@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon  src/index.js",
-    "test": "mocha --timeout 20000",
+    "test": "mocha --timeout 30000",
     "lint": "eslint --fix ."
   },
   "repository": {
