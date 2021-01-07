@@ -1,5 +1,3 @@
-const { GeneralError } = require("./generalError");
-
 /**
  * From a timezone in string, returns the actual local date and time.
  * @param {string} [name] - Name of the timezone to use
