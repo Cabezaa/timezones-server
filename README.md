@@ -154,7 +154,7 @@ No parameters
         "time": "string"
     }]
 
-**Status 504:** A error objetcs. This happens when the WorldTime API is down or busy.
+**Status 504:** A error object. This happens when the WorldTime API is down or busy.
 
 
 #### Endpoint
