@@ -84,7 +84,7 @@ To run the test run the next command:
 npm run test
 ```
 
-It will call `Mocha` with a 20000ms of timeout.
+It will call `Mocha` with a 30000ms of timeout.
 
 **Important:** The test suite will create a new database in the same connection, but with another name (`timezones_test`).
 
@@ -149,7 +149,9 @@ No parameters
     [{
         "_id": "string",
         "name": "string",
-        "show": boolean
+        "show": boolean,
+        "date": "string",
+        "time": "string"
     }]
 
 **Status 504:** A error objetcs. This happens when the WorldTime API is down or busy.
